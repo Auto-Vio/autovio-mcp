@@ -1,0 +1,34 @@
+{
+  "server": {
+    "name": "autovio-mcp-server",
+    "version": "1.0.0"
+  },
+  "autovio": {
+    "baseUrl": "http://localhost:3001",
+    "apiToken": "YOUR_AUTOVIO_API_TOKEN"
+  },
+  "providers": {
+    "vision": {
+      "model": "gemini-2.0-flash-exp",
+      "apiKey": "YOUR_VISION_API_KEY"
+    },
+    "llm": {
+      "model": "gemini-2.5-flash",
+      "apiKey": "YOUR_LLM_API_KEY"
+    },
+    "image": {
+      "model": "gemini-2.5-flash-image",
+      "apiKey": "YOUR_IMAGE_API_KEY"
+    },
+    "video": {
+      "model": "veo-3.0-generate-001",
+      "apiKey": "YOUR_VIDEO_API_KEY"
+    }
+  },
+  "features": {
+    "enableResources": true,
+    "enablePrompts": false,
+    "cacheResponses": false,
+    "logLevel": "info"
+  }
+}

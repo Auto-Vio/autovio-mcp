@@ -1,0 +1,32 @@
+{
+  "mcpServers": {
+    "autovio": {
+      "command": "node",
+      "args": [
+        "/path/to/AutoVio-MCP/dist/index.js",
+        "--autovio-base-url",
+        "http://localhost:3001",
+        "--autovio-api-token",
+        "YOUR_API_TOKEN",
+        "--vision-model",
+        "gemini-2.0-flash-exp",
+        "--vision-api-key",
+        "YOUR_VISION_KEY",
+        "--llm-model",
+        "gemini-2.5-flash",
+        "--llm-api-key",
+        "YOUR_LLM_KEY",
+        "--image-model",
+        "gemini-2.5-flash-image",
+        "--image-api-key",
+        "YOUR_IMAGE_KEY",
+        "--video-model",
+        "veo-3.0-generate-001",
+        "--video-api-key",
+        "YOUR_VIDEO_KEY",
+        "--log-level",
+        "info"
+      ]
+    }
+  }
+}
