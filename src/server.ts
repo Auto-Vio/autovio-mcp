@@ -13,6 +13,7 @@ import { registerWorkTools } from "./tools/work-tools.js";
 import { registerAITools } from "./tools/ai-tools.js";
 import { registerProviderTools } from "./tools/provider-tools.js";
 import { registerTemplateTools } from "./tools/template-tools.js";
+import { registerAssetTools } from "./tools/asset-tools.js";
 import { logger } from "./utils/logger.js";
 
 export async function startServer(config: AutoVioMCPConfig): Promise<void> {
@@ -41,6 +42,7 @@ export async function startServer(config: AutoVioMCPConfig): Promise<void> {
   registerAITools(mcp, client);
   registerProviderTools(mcp, client);
   registerTemplateTools(mcp, client);
+  registerAssetTools(mcp, client);
   logger.info("Tools registered.");
 
   const transport = new StdioServerTransport();

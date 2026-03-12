@@ -2,6 +2,27 @@
  * AutoVio API request/response types (aligned with OpenAPI schemas)
  */
 
+/** Project type determines default prompts and behavior */
+export type ProjectType = "blank" | "saas" | "news" | "social" | "ecommerce" | "educational";
+
+/** How assets should be used in video generation */
+export type AssetUsageMode = "reference" | "direct";
+
+/** Project asset metadata */
+export interface ProjectAsset {
+  id: string;
+  projectId: string;
+  type: "image" | "video" | "audio" | "font";
+  mimeType: string;
+  name: string;
+  size: number;
+  createdAt: number;
+  updatedAt: number;
+  tags?: string[];
+  thumbnail?: string;
+  description?: string;
+}
+
 export interface StyleGuide {
   tone?: string;
   color_palette?: string[];
@@ -14,6 +35,7 @@ export interface StyleGuide {
 
 export interface CreateProjectInput {
   name?: string;
+  projectType?: ProjectType;
   systemPrompt?: string;
   knowledge?: string;
   styleGuide?: StyleGuide;
@@ -44,6 +66,8 @@ export interface CreateWorkInput {
   language?: string;
   videoDuration?: number;
   sceneCount?: number;
+  selectedAssetIds?: string[];
+  assetUsageMode?: AssetUsageMode;
 }
 
 export interface WorkSceneItem {
@@ -128,6 +152,8 @@ export interface UpdateWorkInput {
   language?: string;
   videoDuration?: number;
   sceneCount?: number;
+  selectedAssetIds?: string[];
+  assetUsageMode?: AssetUsageMode;
   analysis?: unknown;
   scenes?: WorkSceneItem[];
   generatedScenes?: unknown[];

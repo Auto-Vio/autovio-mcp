@@ -43,20 +43,22 @@ export function registerProjectTools(mcp: McpServer, client: AutoVioClient): voi
   mcp.registerTool(
     "autovio_projects_create",
     {
-      description: "Create a new project. A project holds brand settings, prompts, and contains multiple works (video pipelines).",
+      description: "Create a new project. A project holds brand settings, prompts, and contains multiple works (video pipelines). Use projectType to start with optimized presets for your content type.",
       inputSchema: {
         name: z.string().optional().describe("Project name (default: 'Yeni Proje')"),
-        systemPrompt: z.string().optional().describe("Custom system prompt for scenario generation"),
+        projectType: z.enum(["blank", "saas", "news", "social", "ecommerce", "educational"]).optional().describe("Project type determines default prompts: 'blank' (photorealistic), 'saas' (UI/UX demos), 'news' (journalism), 'social' (marketing), 'ecommerce' (product showcase), 'educational' (tutorials)"),
+        systemPrompt: z.string().optional().describe("Custom system prompt for scenario generation (overrides preset default)"),
         knowledge: z.string().optional().describe("Brand context or background info for AI"),
         styleGuide: styleGuideSchema.describe("Brand style settings: tone, colors, tempo, camera style, must include/avoid"),
-        imageSystemPrompt: z.string().optional().describe("Instructions for image generation"),
-        videoSystemPrompt: z.string().optional().describe("Instructions for video generation"),
+        imageSystemPrompt: z.string().optional().describe("Instructions for image generation (overrides preset default)"),
+        videoSystemPrompt: z.string().optional().describe("Instructions for video generation (overrides preset default)"),
       },
     },
     async (args) => {
       try {
         const data = await client.projects.create({
           name: args.name,
+          projectType: args.projectType,
           systemPrompt: args.systemPrompt,
           knowledge: args.knowledge,
           styleGuide: args.styleGuide,

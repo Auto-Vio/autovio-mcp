@@ -219,6 +219,51 @@ export class AutoVioClient {
     },
   };
 
+  assets = {
+    list: async (projectId: string, type?: "image" | "video" | "audio" | "font") => {
+      const params = type ? { type } : {};
+      const res = await this.axios.get(`/api/projects/${projectId}/assets`, { params });
+      return res.data;
+    },
+    get: async (projectId: string, assetId: string) => {
+      const res = await this.axios.get(`/api/projects/${projectId}/assets/${assetId}/meta`);
+      return res.data;
+    },
+    analyze: async (projectId: string, assetId: string) => {
+      const { model, apiKey } = this.providers.vision;
+      const res = await this.axios.post(
+        `/api/projects/${projectId}/assets/${assetId}/analyze`,
+        {},
+        {
+          headers: {
+            "x-vision-provider": deriveProvider(model),
+            "x-model-id": model,
+            "x-api-key": apiKey,
+          },
+        }
+      );
+      return res.data;
+    },
+    analyzeBatch: async (projectId: string, assetIds: string[]) => {
+      const { model, apiKey } = this.providers.vision;
+      const res = await this.axios.post(
+        `/api/projects/${projectId}/assets/analyze-batch`,
+        { assetIds },
+        {
+          headers: {
+            "x-vision-provider": deriveProvider(model),
+            "x-model-id": model,
+            "x-api-key": apiKey,
+          },
+        }
+      );
+      return res.data;
+    },
+    delete: async (projectId: string, assetId: string) => {
+      await this.axios.delete(`/api/projects/${projectId}/assets/${assetId}`);
+    },
+  };
+
   templates = {
     list: async (projectId: string) => {
       const res = await this.axios.get(`/api/projects/${projectId}/templates`);

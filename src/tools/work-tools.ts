@@ -34,7 +34,7 @@ export function registerWorkTools(mcp: McpServer, client: AutoVioClient): void {
   mcp.registerTool(
     "autovio_works_create",
     {
-      description: "Create a new work (video pipeline) in a project. After creating, use works_generate_scenario to create scenes, then works_generate_scene to produce images and videos.",
+      description: "Create a new work (video pipeline) in a project. After creating, use works_generate_scenario to create scenes, then works_generate_scene to produce images and videos. Use selectedAssetIds with assetUsageMode to incorporate project assets.",
       inputSchema: {
         projectId: z.string().describe("Project ID to create the work in"),
         name: z.string().optional().describe("Work name (default: 'Yeni Çalışma')"),
@@ -45,6 +45,8 @@ export function registerWorkTools(mcp: McpServer, client: AutoVioClient): void {
         language: z.string().optional().describe("Language code (e.g., 'en', 'tr')"),
         videoDuration: z.number().optional().describe("Target video duration in seconds"),
         sceneCount: z.number().optional().describe("Number of scenes to generate"),
+        selectedAssetIds: z.array(z.string()).optional().describe("Asset IDs from the project to use in video generation"),
+        assetUsageMode: z.enum(["reference", "direct"]).optional().describe("How to use assets: 'reference' = AI learns style from assets, 'direct' = use actual asset images instead of generating new ones"),
       },
     },
     async (args) => {
@@ -154,6 +156,8 @@ export function registerWorkTools(mcp: McpServer, client: AutoVioClient): void {
         language: z.string().optional().describe("Language code"),
         videoDuration: z.number().optional().describe("Duration in seconds"),
         sceneCount: z.number().optional().describe("Number of scenes"),
+        selectedAssetIds: z.array(z.string()).optional().describe("Asset IDs from the project to use in video generation"),
+        assetUsageMode: z.enum(["reference", "direct"]).optional().describe("How to use assets: 'reference' = AI learns style, 'direct' = use actual images"),
         analysis: z.unknown().optional().describe("Reference video analysis result"),
         scenes: z.array(workSceneItemSchema).optional().describe("Scene list with prompts and settings"),
         generatedScenes: z.array(z.unknown()).optional().describe("Generated media status per scene"),
