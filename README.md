@@ -3,6 +3,10 @@
 [![npm version](https://img.shields.io/npm/v/autovio-mcp)](https://www.npmjs.com/package/autovio-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+<p align="center">
+  <img src="./autovio-mcp-demo.gif" alt="AutoVio MCP Demo" width="800">
+</p>
+
 MCP server for the **AutoVio** AI video generation pipeline. Connects Claude Code, Claude Desktop, Cursor, and any MCP-compatible client to the AutoVio API — no clone or build required.
 
 ## Installation
