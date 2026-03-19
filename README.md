@@ -1,143 +1,150 @@
 # AutoVio MCP Server
 
-Server that lets you use the AutoVio API over the **Model Context Protocol (MCP)**. Compatible with Claude Desktop, Cursor IDE, and other MCP clients.
+[![npm version](https://img.shields.io/npm/v/autovio-mcp)](https://www.npmjs.com/package/autovio-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+MCP server for the **AutoVio** AI video generation pipeline. Connects Claude Code, Claude Desktop, Cursor, and any MCP-compatible client to the AutoVio API — no clone or build required.
 
 ## Installation
 
+No installation needed. Use `npx` to run the server directly:
+
 ```bash
-npm install
-npm run build
+npx autovio-mcp --autovio-base-url http://localhost:3001 --autovio-api-token YOUR_TOKEN
+```
+
+Or install globally:
+
+```bash
+npm install -g autovio-mcp
+autovio-mcp --autovio-base-url http://localhost:3001 --autovio-api-token YOUR_TOKEN
 ```
 
 ## Quick Start
 
-### Configuration
-
-Config is loaded from four sources; **priority: CLI parameters > environment variables > config file > defaults**.
-
-**CLI parameters** — AutoVio connection plus the four AI pairs (model name + API key). Provider is derived from the model name:
-
-| Parameter | Description |
-|-----------|--------------|
-| `--config` | Path to config JSON file |
-| `--autovio-base-url` | AutoVio API base URL |
-| `--autovio-api-token` | AutoVio API token |
-| **Video Analysis** | |
-| `--vision-model` | Model name (e.g. gemini-2.0-flash-exp) |
-| `--vision-api-key` | API key |
-| **LLM** | |
-| `--llm-model` | Model name (e.g. gemini-2.5-flash) |
-| `--llm-api-key` | API key |
-| **Image Generate** | |
-| `--image-model` | Model name (e.g. gemini-2.5-flash-image) |
-| `--image-api-key` | API key |
-| **Video Generate** | |
-| `--video-model` | Model name (e.g. veo-3.0-generate-001) |
-| `--video-api-key` | API key |
-| `--log-level` | `debug` \| `info` \| `warn` \| `error` |
-| `--enable-resources` | `true` \| `false` |
-| `--enable-prompts` | `true` \| `false` |
-
-CamelCase (e.g. `--autovioBaseUrl`) is also accepted.
-
-**Environment variables:** `AUTOVIO_BASE_URL`, `AUTOVIO_API_TOKEN`, `AUTOVIO_VISION_MODEL`, `AUTOVIO_VISION_API_KEY`, `AUTOVIO_LLM_MODEL`, `AUTOVIO_LLM_API_KEY`, `AUTOVIO_IMAGE_MODEL`, `AUTOVIO_IMAGE_API_KEY`, `AUTOVIO_VIDEO_MODEL`, `AUTOVIO_VIDEO_API_KEY`, `AUTOVIO_LOG_LEVEL`, `AUTOVIO_MCP_CONFIG`.
-
-Example config file: `examples/config.example.json`
-
-### Running
+### Claude Code
 
 ```bash
-# Default (env or default baseUrl/token)
-node dist/index.js
-
-# With config file
-node dist/index.js --config examples/config.example.json
-
-# Development (watch)
-npm run dev
+claude mcp add autovio-mcp -- npx -y autovio-mcp \
+  --autovio-base-url http://localhost:3001 \
+  --autovio-api-token YOUR_TOKEN \
+  --llm-model gemini-2.5-flash \
+  --llm-api-key YOUR_KEY \
+  --image-model gemini-2.5-flash-image \
+  --image-api-key YOUR_KEY \
+  --video-model veo-3.0-generate-001 \
+  --video-api-key YOUR_KEY
 ```
 
-### Claude Desktop
+### Claude Desktop / Cursor
 
-You can pass all config values as CLI arguments. Example: `examples/claude-desktop-config.json`
+Add to your `claude_desktop_config.json` (or equivalent MCP config):
 
 ```json
 {
   "mcpServers": {
     "autovio": {
-      "command": "node",
+      "command": "npx",
       "args": [
-        "/absolute/path/to/AutoVio-MCP/dist/index.js",
+        "-y", "autovio-mcp",
         "--autovio-base-url", "http://localhost:3001",
         "--autovio-api-token", "YOUR_TOKEN",
-        "--vision-model", "gemini-2.0-flash-exp",
-        "--vision-api-key", "YOUR_VISION_KEY",
         "--llm-model", "gemini-2.5-flash",
-        "--llm-api-key", "YOUR_LLM_KEY",
+        "--llm-api-key", "YOUR_KEY",
         "--image-model", "gemini-2.5-flash-image",
-        "--image-api-key", "YOUR_IMAGE_KEY",
+        "--image-api-key", "YOUR_KEY",
         "--video-model", "veo-3.0-generate-001",
-        "--video-api-key", "YOUR_VIDEO_KEY"
+        "--video-api-key", "YOUR_KEY"
       ]
     }
   }
 }
 ```
 
-Using only environment variables also works:
+## Configuration
 
-```json
-{
-  "mcpServers": {
-    "autovio": {
-      "command": "node",
-      "args": ["/path/to/AutoVio-MCP/dist/index.js"],
-      "env": {
-        "AUTOVIO_BASE_URL": "http://localhost:3001",
-        "AUTOVIO_API_TOKEN": "your-token",
-        "AUTOVIO_LLM_API_KEY": "your-llm-key"
-      }
-    }
-  }
-}
+Config is loaded from four sources in priority order: **CLI flags > environment variables > config file > defaults**.
+
+### CLI flags
+
+| Flag | Description |
+|------|-------------|
+| `--autovio-base-url` | AutoVio API base URL (default: `http://localhost:3001`) |
+| `--autovio-api-token` | AutoVio API token |
+| `--config` | Path to a JSON config file |
+| `--vision-model` | Vision model (e.g. `gemini-2.0-flash-exp`) |
+| `--vision-api-key` | Vision API key |
+| `--llm-model` | LLM model (e.g. `gemini-2.5-flash`) |
+| `--llm-api-key` | LLM API key |
+| `--image-model` | Image model (e.g. `gemini-2.5-flash-image`) |
+| `--image-api-key` | Image API key |
+| `--video-model` | Video model (e.g. `veo-3.0-generate-001`) |
+| `--video-api-key` | Video API key |
+| `--log-level` | `debug` \| `info` \| `warn` \| `error` |
+| `--enable-resources` | `true` \| `false` |
+| `--enable-prompts` | `true` \| `false` |
+
+CamelCase variants (e.g. `--autovioBaseUrl`) are also accepted.
+
+### Environment variables
+
 ```
+AUTOVIO_BASE_URL        AUTOVIO_API_TOKEN
+AUTOVIO_VISION_MODEL    AUTOVIO_VISION_API_KEY
+AUTOVIO_LLM_MODEL       AUTOVIO_LLM_API_KEY
+AUTOVIO_IMAGE_MODEL     AUTOVIO_IMAGE_API_KEY
+AUTOVIO_VIDEO_MODEL     AUTOVIO_VIDEO_API_KEY
+AUTOVIO_LOG_LEVEL       AUTOVIO_MCP_CONFIG
+```
+
+### Config file
+
+Pass a JSON file with `--config path/to/config.json`. See `examples/config.example.json` for the full structure.
 
 ## Available Tools
 
-- **autovio_health** — API health check
-- **autovio_auth_login** — Login (email, password)
-- **autovio_auth_register** — New user registration
-- **autovio_auth_me** — Current user info
-- **autovio_projects_list** — List projects
-- **autovio_projects_create** — Create project
-- **autovio_projects_get** — Get project details
-- **autovio_projects_update** — Update project
-- **autovio_projects_delete** — Delete project
-- **autovio_works_list** — List works
-- **autovio_works_create** — Create work
-- **autovio_works_get** — Get work details
-- **autovio_works_update** — Update work
-- **autovio_works_delete** — Delete work
-- **autovio_works_apply_template** — Apply template to work
-- **autovio_ai_analyze_video** — Reference video analysis (base64 video)
-- **autovio_ai_generate_scenario** — Scenario generation (intent + analysis)
-- **autovio_ai_generate_scenario_for_work** — Generate scenario for work
-- **autovio_ai_generate_image** — Image generation
-- **autovio_ai_generate_video** — Video generation from image
-- **autovio_ai_generate_scene** — Image + video for a single scene
-- **autovio_providers_list** — List available AI providers
-- **autovio_templates_list** — List templates
-- **autovio_templates_get** — Get template details
-- **autovio_templates_create** — Create template
-- **autovio_templates_update** — Update template
-- **autovio_templates_delete** — Delete template
-
-For full API and tool details, see the AutoVio OpenAPI spec in the main AutoVio backend or the **AutoVio-Docs** documentation (MCP section).
+| Tool | Description |
+|------|-------------|
+| `autovio_health` | API health check |
+| `autovio_auth_login` | Login (email + password) |
+| `autovio_auth_register` | Register new user |
+| `autovio_auth_me` | Current user info |
+| `autovio_projects_list` | List projects |
+| `autovio_projects_create` | Create project |
+| `autovio_projects_get` | Get project details |
+| `autovio_projects_update` | Update project |
+| `autovio_projects_delete` | Delete project |
+| `autovio_works_list` | List works |
+| `autovio_works_create` | Create work |
+| `autovio_works_get` | Get work details |
+| `autovio_works_update` | Update work |
+| `autovio_works_delete` | Delete work |
+| `autovio_works_apply_template` | Apply template to work |
+| `autovio_ai_analyze_video` | Analyze reference video for style/tone |
+| `autovio_ai_generate_scenario` | Generate scene-by-scene scenario |
+| `autovio_ai_generate_scenario_for_work` | Generate scenario attached to a work |
+| `autovio_ai_generate_image` | Generate image from prompt |
+| `autovio_ai_generate_video` | Animate image into video clip |
+| `autovio_ai_generate_scene` | Generate image + video for one scene |
+| `autovio_providers_list` | List available AI providers |
+| `autovio_templates_list` | List templates |
+| `autovio_templates_get` | Get template details |
+| `autovio_templates_create` | Create template |
+| `autovio_templates_update` | Update template |
+| `autovio_templates_delete` | Delete template |
 
 ## Requirements
 
 - Node.js >= 18
-- Access to the AutoVio API (baseUrl + apiToken, or login via auth tools)
+- A running [AutoVio](https://github.com/Auto-Vio/autovio) backend
+- An AutoVio API token (or use `autovio_auth_login` to get one)
+- API keys for the AI providers you want to use
+
+## Links
+
+- [AutoVio](https://github.com/Auto-Vio/autovio) — core platform
+- [Documentation](https://auto-vio.github.io/autovio-docs/mcp/overview/) — full MCP setup guide and tool reference
+- [npm](https://www.npmjs.com/package/autovio-mcp)
 
 ## License
 
