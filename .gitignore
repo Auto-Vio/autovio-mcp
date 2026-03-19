@@ -8,3 +8,4 @@ coverage/
 .vitest/
 *.tsbuildinfo
 .keys
+.Auto-Vio.code-workspace
