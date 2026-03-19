@@ -68,6 +68,8 @@ export interface CreateWorkInput {
   sceneCount?: number;
   selectedAssetIds?: string[];
   assetUsageMode?: AssetUsageMode;
+  /** Output resolution for image/video generation and export */
+  resolution?: { width: number; height: number };
 }
 
 export interface WorkSceneItem {
@@ -154,6 +156,8 @@ export interface UpdateWorkInput {
   sceneCount?: number;
   selectedAssetIds?: string[];
   assetUsageMode?: AssetUsageMode;
+  /** Output resolution for image/video generation and export */
+  resolution?: { width: number; height: number };
   analysis?: unknown;
   scenes?: WorkSceneItem[];
   generatedScenes?: unknown[];
@@ -181,6 +185,8 @@ export interface GenerateImageRequest {
   negative_prompt?: string;
   image_instruction?: string;
   styleGuide?: StyleGuide;
+  /** Output resolution — maps to provider-specific size (DALL-E 3: size param, etc.) */
+  resolution?: { width: number; height: number };
 }
 
 export interface GenerateVideoRequest {
@@ -189,6 +195,8 @@ export interface GenerateVideoRequest {
   duration?: number;
   video_instruction?: string;
   styleGuide?: StyleGuide;
+  /** Output resolution — maps to provider-specific ratio (Runway: ratio, Veo: aspectRatio) */
+  resolution?: { width: number; height: number };
 }
 
 export interface ExportRequest {

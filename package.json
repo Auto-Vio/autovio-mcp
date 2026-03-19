@@ -1,6 +1,6 @@
 {
   "name": "autovio-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AutoVio MCP Server - AI-powered video automation via Model Context Protocol",
   "type": "module",
   "main": "./dist/index.js",

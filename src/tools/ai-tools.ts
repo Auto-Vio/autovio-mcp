@@ -82,6 +82,8 @@ export function registerAITools(mcp: McpServer, client: AutoVioClient): void {
     }
   );
 
+  const resolutionSchema = z.object({ width: z.number(), height: z.number() }).optional();
+
   mcp.registerTool(
     "autovio_ai_generate_image",
     {
@@ -91,6 +93,7 @@ export function registerAITools(mcp: McpServer, client: AutoVioClient): void {
         negative_prompt: z.string().optional().describe("What to avoid in the image"),
         image_instruction: z.string().optional().describe("Additional style instructions"),
         styleGuide: styleGuideSchema.describe("Brand style settings"),
+        resolution: resolutionSchema.describe("Output resolution. Maps to DALL-E 3 size (portrait→1024x1792, landscape→1792x1024, square→1024x1024). Presets: Portrait 9:16 {width:1080,height:1920}, Landscape 16:9 {width:1920,height:1080}, Square 1:1 {width:1080,height:1080}"),
       },
     },
     async (args) => {
@@ -100,6 +103,7 @@ export function registerAITools(mcp: McpServer, client: AutoVioClient): void {
           negative_prompt: args.negative_prompt,
           image_instruction: args.image_instruction,
           styleGuide: args.styleGuide,
+          resolution: args.resolution,
         });
         return { content: jsonContent(JSON.stringify(data, null, 2)) };
       } catch (err: unknown) {
@@ -118,6 +122,7 @@ export function registerAITools(mcp: McpServer, client: AutoVioClient): void {
         duration: z.number().optional().describe("Video duration in seconds (default: 5)"),
         video_instruction: z.string().optional().describe("Additional video instructions"),
         styleGuide: styleGuideSchema.describe("Brand style settings"),
+        resolution: resolutionSchema.describe("Output resolution. Maps to Runway ratio (portrait→768:1280, landscape→1280:768) or Veo aspectRatio (9:16, 16:9, 1:1). Presets: Portrait 9:16 {width:1080,height:1920}, Landscape 16:9 {width:1920,height:1080}, Square 1:1 {width:1080,height:1080}"),
       },
     },
     async (args) => {
@@ -128,6 +133,7 @@ export function registerAITools(mcp: McpServer, client: AutoVioClient): void {
           duration: args.duration,
           video_instruction: args.video_instruction,
           styleGuide: args.styleGuide,
+          resolution: args.resolution,
         });
         return { content: jsonContent(JSON.stringify(data, null, 2)) };
       } catch (err: unknown) {

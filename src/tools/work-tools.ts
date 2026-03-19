@@ -47,6 +47,7 @@ export function registerWorkTools(mcp: McpServer, client: AutoVioClient): void {
         sceneCount: z.number().optional().describe("Number of scenes to generate"),
         selectedAssetIds: z.array(z.string()).optional().describe("Asset IDs from the project to use in video generation"),
         assetUsageMode: z.enum(["reference", "direct"]).optional().describe("How to use assets: 'reference' = AI learns style from assets, 'direct' = use actual asset images instead of generating new ones"),
+        resolution: z.object({ width: z.number(), height: z.number() }).optional().describe("Output resolution for image/video generation and export. Presets: Portrait 9:16 {width:1080,height:1920}, Landscape 16:9 {width:1920,height:1080}, Square 1:1 {width:1080,height:1080}. Default: Portrait 9:16"),
       },
     },
     async (args) => {
@@ -158,6 +159,7 @@ export function registerWorkTools(mcp: McpServer, client: AutoVioClient): void {
         sceneCount: z.number().optional().describe("Number of scenes"),
         selectedAssetIds: z.array(z.string()).optional().describe("Asset IDs from the project to use in video generation"),
         assetUsageMode: z.enum(["reference", "direct"]).optional().describe("How to use assets: 'reference' = AI learns style, 'direct' = use actual images"),
+        resolution: z.object({ width: z.number(), height: z.number() }).optional().describe("Output resolution for image/video generation and export. Presets: Portrait 9:16 {width:1080,height:1920}, Landscape 16:9 {width:1920,height:1080}, Square 1:1 {width:1080,height:1080}"),
         analysis: z.unknown().optional().describe("Reference video analysis result"),
         scenes: z.array(workSceneItemSchema).optional().describe("Scene list with prompts and settings"),
         generatedScenes: z.array(z.unknown()).optional().describe("Generated media status per scene"),
